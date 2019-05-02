@@ -11,6 +11,11 @@ import java.util.List;
 import static de.parcit.didemo.util.ListUtil.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Same as {@link InteractiveMailMergePrintingTest} but does not use Guice to
+ * create the System under test, but "manually" passes the requires parameters
+ * to the Sut's constructor.
+ */
 class Version2_InteractiveMailMergePrintingTest {
 
     // Test data
