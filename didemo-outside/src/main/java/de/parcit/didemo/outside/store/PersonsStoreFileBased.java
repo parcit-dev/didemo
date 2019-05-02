@@ -13,10 +13,9 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class PersonsStoreFileBased implements PersonsStore {
-    private static final Path DEFAULT_STORAGE_PATH = Paths
-            .get(System.getProperty("user.home"),".didemo", "store", "persons");
-    private final Path storagePath = DEFAULT_STORAGE_PATH;
 
+    private static final Path DEFAULT_STORAGE_PATH = Paths.get("sample-data", "store", "persons");
+    private final Path storagePath = DEFAULT_STORAGE_PATH;
 
 
     @Override
@@ -25,7 +24,7 @@ public class PersonsStoreFileBased implements PersonsStore {
             Files.createDirectories(storagePath);
 
             return Files.list(storagePath)
-                    .filter(p-> p.toString().endsWith(".txt"))
+                    .filter(p -> p.toString().endsWith(".txt"))
                     .map(this::loadPersonFromFile)
                     .collect(Collectors.toList());
 

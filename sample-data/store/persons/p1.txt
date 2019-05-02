@@ -1,0 +1,4 @@
+firstName: John
+lastName: Doe
+salutation: Mr.
+address: 542 Main St\nSpringfield, AC 12345
