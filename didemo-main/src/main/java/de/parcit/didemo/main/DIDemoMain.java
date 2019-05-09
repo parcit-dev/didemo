@@ -3,7 +3,7 @@ package de.parcit.didemo.main;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import de.parcit.didemo.app.InteractiveMailMergePrinting;
+import de.parcit.didemo.app.MailMergePrinting;
 import de.parcit.didemo.app.MailMergeUI;
 import de.parcit.didemo.app.PersonsStore;
 import de.parcit.didemo.app.Printer;
@@ -20,8 +20,8 @@ public class DIDemoMain {
 
     public static void main(String[] args) {
 
-        InteractiveMailMergePrinting app =
-                injector.getInstance(InteractiveMailMergePrinting.class);
+        MailMergePrinting app =
+                injector.getInstance(MailMergePrinting.class);
 
         app.printMailMergeWithUI();
     }

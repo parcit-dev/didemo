@@ -1,8 +1,6 @@
 package de.parcit.didemo.app;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import de.parcit.didemo.app.SelectPersonsAndTemplateUI.SelectionResult;
 import de.parcit.didemo.core.MailMergeTemplate;
 import de.parcit.didemo.core.Person;
@@ -13,8 +11,12 @@ import java.util.List;
 import static de.parcit.didemo.util.ListUtil.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class InteractiveMailMergePrintingTest {
-
+/**
+ * Same as {@link MailMergePrintingTest} but does not use Guice to
+ * create the System under test, but "manually" passes the requires parameters
+ * to the Sut's constructor.
+ */
+class MailMergePrintingTest_NoGuice {
 
     // Test data
     private static final Person person1 = new SamplePerson("p1", "F1", "L1", "Mr.", "ADR1");
@@ -24,16 +26,22 @@ class InteractiveMailMergePrintingTest {
     private static final MailMergeTemplate template1 = new SampleTemplate("temp1");
     private static final MailMergeTemplate template2 = new SampleTemplate("temp2");
     private static final List<String> allTemplateNames = toList("temp1", "temp2");
-    private static final Injector injector = Guice.createInjector(new GuiceModuleForAppTest());
+
     // Test Input
     private static List<Person> personsPassedToUI;
     private static List<String> templateNamesPassedToUI;
+
     // Test Output
     private static SelectionResult selectionToReturnFromUI;
     private static StringBuilder printerOutput;
+
     // System under test
-    private final InteractiveMailMergePrinting sut =
-            injector.getInstance(InteractiveMailMergePrinting.class);
+    private final MailMergePrinting sut =
+            new MailMergePrinting(
+                    new PersonsStoreForTest(),
+                    new TemplatesForTest(),
+                    new MailMergeUIForTest(),
+                    new PrinterForTest());
 
     @Test
     void printMailMergeWithUI_singlePersonSelected() {
@@ -53,11 +61,9 @@ class InteractiveMailMergePrintingTest {
 
     @Test
     void printMailMergeWithUI_multiplePersonsSelected() {
-
         // Arrange
         printerOutput = new StringBuilder();
-        selectionToReturnFromUI = new SampleSelectionResult("temp2",
-                person1, person2, person3);
+        selectionToReturnFromUI = new SampleSelectionResult("temp2", person1, person2, person3);
 
         // Act
         sut.printMailMergeWithUI();
@@ -65,15 +71,13 @@ class InteractiveMailMergePrintingTest {
         // Assert
         assertEquals(allPersons, personsPassedToUI);
         assertEquals(allTemplateNames, templateNamesPassedToUI);
-        assertEquals(
-                "template temp2 with Mr. F1 L1 ADR1\n" +
-                        "template temp2 with Mrs. F2 L2 ADR2\n" +
-                        "template temp2 with Mr. F3 L3 ADR3\n", printerOutput.toString());
+        assertEquals("template temp2 with Mr. F1 L1 ADR1\n" +
+                "template temp2 with Mrs. F2 L2 ADR2\n" +
+                "template temp2 with Mr. F3 L3 ADR3\n", printerOutput.toString());
     }
 
     @Test
     void printMailMergeWithUI_userCanceled() {
-
         // Arrange
         printerOutput = new StringBuilder();
         selectionToReturnFromUI = null;
@@ -236,7 +240,6 @@ class InteractiveMailMergePrintingTest {
     }
 
     private static class PrinterForTest implements Printer {
-
         @Override
         public void print(String textToPrint) {
             printerOutput.append(textToPrint);

@@ -5,7 +5,7 @@ import de.parcit.didemo.app.SelectPersonsAndTemplateUI.SelectionResult;
 import de.parcit.didemo.core.MailMergeTemplate;
 import de.parcit.didemo.core.Person;
 
-public class InteractiveMailMergePrinting {
+public class MailMergePrinting {
 
     private final PersonsStore store;
     private final TemplatesProvider templatesProvider;
@@ -13,7 +13,7 @@ public class InteractiveMailMergePrinting {
     private final Printer printer;
 
     @Inject
-    public InteractiveMailMergePrinting(
+    public MailMergePrinting(
             PersonsStore store,
             TemplatesProvider templatesProvider,
             MailMergeUI ui,
